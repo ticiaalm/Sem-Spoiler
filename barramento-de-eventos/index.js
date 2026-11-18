@@ -1,0 +1,24 @@
+const express = require('express')
+const axios = require('axios')
+const app = express()
+app.use(express.json())
+
+const eventos = []
+
+app.post('/eventos', async (req, res) => {
+    const evento = req.body
+    eventos.push(evento)
+    console.log(evento)
+
+    try {
+        await axios.post('http://localhost:4000/eventos', evento)
+    } catch(e) {}
+    try {
+        await axios.post('http://localhost:4100/eventos', evento)
+    } catch(e) {}
+
+    res.end()
+})
+
+const port = 10000
+app.listen(port, () => console.log(`Barramento de eventos. Porta ${port}.`))

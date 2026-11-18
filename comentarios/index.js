@@ -1,4 +1,5 @@
 const express = require('express')
+const axios = require('axios')
 const app = express()
 const {v4: uuidv4} = require('uuid')
 app.use(express.json())
@@ -17,11 +18,22 @@ app.post('/series/:id/comentarios', async (req, res) => {
     const comentariosDaSerie = comentariosPorSerieId[req.params.id] || []
     comentariosDaSerie.push(comentario)
     comentariosPorSerieId[req.params.id] = comentariosDaSerie
+
+    await axios.post('http://localhost:10000/eventos', {
+        tipo: 'comentarioCriado',
+        dados: comentario
+    })
     res.status(201).json(comentariosPorSerieId[req.params.id])
 })
 
 app.get('/series/:id/comentarios', (req, res) => {
     res.json(comentariosPorSerieId[req.params.id] || [])
+})
+
+app.post('/eventos', (req, res) => {
+    const tipo = req.body
+    console.log(tipo)
+    res.end()
 })
 
 const port = 4100

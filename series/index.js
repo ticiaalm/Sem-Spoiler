@@ -1,4 +1,5 @@
 const express = require('express')
+const axios = require('axios')
 const app = express()
 app.use(express.json())
 
@@ -24,8 +25,18 @@ app.post('/series', async (req, res) => {
         plataforma: plataforma
     }
     series[id] = serie
+    await axios.post('http://localhost:10000/eventos', {
+        tipo: 'serieCriada',
+        dados: serie
+    })
     id++
     res.status(201).json(serie)
+})
+
+app.post('/eventos', (req, res) => {
+    const tipo = req.body
+    console.log(tipo)
+    res.end()
 })
 
 const port = 4000
