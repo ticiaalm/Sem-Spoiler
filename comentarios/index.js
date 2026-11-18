@@ -20,7 +20,7 @@ app.post('/series/:id/comentarios', async (req, res) => {
     comentariosPorSerieId[req.params.id] = comentariosDaSerie
 
     await axios.post('http://localhost:10000/eventos', {
-        tipo: 'comentarioCriado',
+        tipo: 'ComentarioCriado',
         dados: comentario
     })
     res.status(201).json(comentariosPorSerieId[req.params.id])
@@ -31,8 +31,10 @@ app.get('/series/:id/comentarios', (req, res) => {
 })
 
 app.post('/eventos', (req, res) => {
-    const tipo = req.body
-    console.log(tipo)
+    try {
+        const tipo = req.body
+        console.log(tipo)
+    } catch(e) {}
     res.end()
 })
 

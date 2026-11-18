@@ -26,7 +26,7 @@ app.post('/series', async (req, res) => {
     }
     series[id] = serie
     await axios.post('http://localhost:10000/eventos', {
-        tipo: 'serieCriada',
+        tipo: 'SerieCriada',
         dados: serie
     })
     id++
@@ -34,8 +34,10 @@ app.post('/series', async (req, res) => {
 })
 
 app.post('/eventos', (req, res) => {
-    const tipo = req.body
-    console.log(tipo)
+    try {
+        const tipo = req.body
+        console.log(tipo)
+    } catch(e) {}
     res.end()
 })
 
