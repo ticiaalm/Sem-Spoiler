@@ -25,5 +25,9 @@ app.post('/eventos', async (req, res) => {
     res.end()
 })
 
+app.get('/eventos', (req, res) => {
+    res.json(eventos)
+})
+
 const port = 10000
 app.listen(port, () => console.log(`Barramento de eventos. Porta ${port}.`))

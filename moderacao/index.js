@@ -4,6 +4,8 @@ const app = express()
 app.use(express.json())
 
 const palavrasProibidas = ["morre", "final", "assassino", "traidor"]
+const ultimosEventos = {}
+
 
 const moderaComentario = async (comentario) => {
     let status = "liberado"
@@ -44,4 +46,23 @@ app.post('/eventos', function (req, res) {
 })
 
 const port = 4300
-app.listen(port, () => console.log(`Moderação. Porta ${port}.`))
+app.listen(port, async () => {console.log(`Moderação. Porta ${port}.`)
+    try {
+        const resposta = await axios.get('http://localhost:10000/eventos')
+        resposta.data.forEach(evento => {
+            if (
+                evento.tipo === 'ComentarioCriado' || 
+                evento.tipo === 'ComentarioEditado' || 
+                evento.tipo === 'ComentarioModerado' 
+            ) {
+                ultimosEventos[evento.dados.id] = evento
+            }
+        })
+        for (let id in ultimosEventos) {
+            let evento = ultimosEventos[id]
+            try {
+                funcoes[evento.tipo](evento.dados)
+            } catch(e){}
+        }
+    } catch(e){ console.log("Barramento indisponível")}
+})

@@ -58,4 +58,14 @@ app.get('/series/:id', (req, res) => {
 })
 
 const port = 4200
-app.listen(port, () => console.log(`Consulta. Porta ${port}.`))
+app.listen(port, async () => {console.log(`Consulta. Porta ${port}.`)
+    try {
+        const resposta = await axios.get('http://localhost:10000/eventos')
+        const eventos = resposta.data
+        resposta.data.forEach(evento => {
+            try {
+                funcoes[evento.tipo](evento.dados)
+            } catch(e){}
+        })
+    } catch(e){console.log("Barramento indisponível")}
+})
