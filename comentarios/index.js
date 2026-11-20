@@ -5,6 +5,7 @@ const {v4: uuidv4} = require('uuid')
 app.use(express.json())
 
 const comentariosPorSerieId = {}
+const HOST = 'localhost'
 
 const funcoes = {
     ComentarioModerado: async (comentarioModerado) => {
@@ -12,7 +13,7 @@ const funcoes = {
         const comentario = comentarios.find(c => c.id === comentarioModerado.id)
         if (comentario) {
             comentario.status = comentarioModerado.status
-            await axios.post('http://localhost:10000/eventos', {
+            await axios.post(`http://${HOST}:10000/eventos`, {
                 tipo: 'ComentarioAtualizado',
                 dados: comentario
             })
@@ -34,7 +35,7 @@ app.post('/series/:id/comentarios', async (req, res) => {
     comentariosDaSerie.push(comentario)
     comentariosPorSerieId[req.params.id] = comentariosDaSerie
 
-    await axios.post('http://localhost:10000/eventos', {
+    await axios.post(`http://${HOST}:10000/eventos`, {
         tipo: 'ComentarioCriado',
         dados: comentario
     })
@@ -57,7 +58,7 @@ app.put ('/series/:id/comentarios/:idComentario', async (req, res) => {
     comentario.texto = texto
     comentario.status = "pendente"
     
-    await axios.post('http://localhost:10000/eventos', {
+    await axios.post(`http://${HOST}:10000/eventos`, {
         tipo: 'ComentarioEditado',
         dados: comentario
     })

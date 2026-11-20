@@ -5,6 +5,7 @@ app.use(express.json())
 
 const series = {}
 let id = 1
+const HOST = 'localhost'
 
 app.get('/series', (req, res) => {
     res.json(series)
@@ -26,7 +27,7 @@ app.post('/series', async (req, res) => {
     }
     series[id] = serie
 
-    await axios.post('http://localhost:10000/eventos', {
+    await axios.post(`http://${HOST}:10000/eventos`, {
         tipo: 'SerieCriada',
         dados: serie
     })

@@ -4,8 +4,9 @@ const app = express()
 app.use(express.json())
 
 const baseConsulta = {}
+const HOST = 'localhost'
 
-const atualizarComentario = (comentarioAtualizado) => {
+const atualizaComentario = (comentarioAtualizado) => {
     const serie = baseConsulta[comentarioAtualizado.serieId]
     if (serie) {
         const aux = serie.comentarios.findIndex(c => c.id === comentarioAtualizado.id)
@@ -29,8 +30,8 @@ const funcoes = {
         comentarios.push(comentario)
         baseConsulta[comentario.serieId]['comentarios'] = comentarios
     },
-    ComentarioAtualizado: atualizarComentario,
-    ComentarioEditado: atualizarComentario
+    ComentarioAtualizado: atualizaComentario,
+    ComentarioEditado: atualizaComentario
 }
 
 app.post('/eventos', function (req, res) {
@@ -60,7 +61,7 @@ app.get('/series/:id', (req, res) => {
 const port = 4200
 app.listen(port, async () => {console.log(`Consulta. Porta ${port}.`)
     try {
-        const resposta = await axios.get('http://localhost:10000/eventos')
+        const resposta = await axios.get(`http://${HOST}:10000/eventos`)
         const eventos = resposta.data
         resposta.data.forEach(evento => {
             try {
