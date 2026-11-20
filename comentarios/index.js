@@ -1,10 +1,24 @@
-const express = require('express')
 const axios = require('axios')
+const express = require('express')
 const app = express()
 const {v4: uuidv4} = require('uuid')
 app.use(express.json())
 
 const comentariosPorSerieId = {}
+
+const funcoes = {
+    ComentarioModerado: async (comentarioModerado) => {
+        const comentarios = comentariosPorSerieId[comentarioModerado.serieId] || []
+        const comentario = comentarios.find(c => c.id === comentarioModerado.id)
+        if (comentario) {
+            comentario.status = comentarioModerado.status
+            await axios.post('http://localhost:10000/eventos', {
+                tipo: 'ComentarioAtualizado',
+                dados: comentario
+            })
+        }
+    }
+}
 
 app.post('/series/:id/comentarios', async (req, res) => {
     const idCom = uuidv4()
@@ -13,7 +27,8 @@ app.post('/series/:id/comentarios', async (req, res) => {
     const comentario = {
         id: idCom,
         texto: texto,
-        serieId: req.params.id
+        serieId: req.params.id,
+        status: "pendente"
     }
     const comentariosDaSerie = comentariosPorSerieId[req.params.id] || []
     comentariosDaSerie.push(comentario)
@@ -32,8 +47,9 @@ app.get('/series/:id/comentarios', (req, res) => {
 
 app.post('/eventos', (req, res) => {
     try {
-        const tipo = req.body
-        console.log(tipo)
+        const evento = req.body
+        console.log(evento)
+        funcoes[evento.tipo](evento.dados)
     } catch(e) {}
     res.end()
 })

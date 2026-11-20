@@ -1,5 +1,5 @@
-const express = require('express')
 const axios = require('axios')
+const express = require('express')
 const app = express()
 app.use(express.json())
 
@@ -35,8 +35,8 @@ app.post('/series', async (req, res) => {
 
 app.post('/eventos', (req, res) => {
     try {
-        const tipo = req.body
-        console.log(tipo)
+        const evento = req.body
+        console.log(evento)
     } catch(e) {}
     res.end()
 })

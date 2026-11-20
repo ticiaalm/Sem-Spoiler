@@ -18,16 +18,25 @@ const funcoes = {
         const comentarios = baseConsulta[comentario.serieId]['comentarios']
         comentarios.push(comentario)
         baseConsulta[comentario.serieId]['comentarios'] = comentarios
+    },
+    ComentarioAtualizado: (comentarioAtualizado) => {
+        const serie = baseConsulta[comentarioAtualizado.serieId]
+        if (serie) {
+            const aux = serie.comentarios.findIndex(c => c.id === comentarioAtualizado.id)
+            if (aux >= 0) {
+                serie.comentarios[aux] = comentarioAtualizado
+            }
+        }
     }
 }
 
-app.post('/eventos', function(req, res){
-  try {
-    const evento = req.body
-    console.log(evento)
-    funcoes[evento.tipo](evento.dados)
-  } catch(e){}
-  res.end()
+app.post('/eventos', function (req, res) {
+    try {
+        const evento = req.body
+        console.log(evento)
+        funcoes[evento.tipo](evento.dados)
+    } catch(e) {}
+    res.end()
 })
 
 app.get('/series', (req, res) => {
