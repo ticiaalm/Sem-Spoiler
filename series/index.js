@@ -25,10 +25,12 @@ app.post('/series', async (req, res) => {
         plataforma: plataforma
     }
     series[id] = serie
+
     await axios.post('http://localhost:10000/eventos', {
         tipo: 'SerieCriada',
         dados: serie
     })
+    
     id++
     res.status(201).json(serie)
 })

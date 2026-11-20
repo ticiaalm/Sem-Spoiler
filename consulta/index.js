@@ -5,6 +5,16 @@ app.use(express.json())
 
 const baseConsulta = {}
 
+const atualizarComentario = (comentarioAtualizado) => {
+    const serie = baseConsulta[comentarioAtualizado.serieId]
+    if (serie) {
+        const aux = serie.comentarios.findIndex(c => c.id === comentarioAtualizado.id)
+        if (aux >= 0) {
+            serie.comentarios[aux] = comentarioAtualizado
+        }
+    }
+}
+
 const funcoes = {
     SerieCriada: (serie) => {
         baseConsulta[serie.id] = {
@@ -19,15 +29,8 @@ const funcoes = {
         comentarios.push(comentario)
         baseConsulta[comentario.serieId]['comentarios'] = comentarios
     },
-    ComentarioAtualizado: (comentarioAtualizado) => {
-        const serie = baseConsulta[comentarioAtualizado.serieId]
-        if (serie) {
-            const aux = serie.comentarios.findIndex(c => c.id === comentarioAtualizado.id)
-            if (aux >= 0) {
-                serie.comentarios[aux] = comentarioAtualizado
-            }
-        }
-    }
+    ComentarioAtualizado: atualizarComentario,
+    ComentarioEditado: atualizarComentario
 }
 
 app.post('/eventos', function (req, res) {
@@ -47,7 +50,7 @@ app.get('/series/:id', (req, res) => {
     const id = req.params.id
     const serie = baseConsulta[id]
     if (!serie) {
-        return res.status(400).json({
+        return res.status(404).json({
             erro: "série não encontrada"
         })
     }

@@ -5,29 +5,33 @@ app.use(express.json())
 
 const palavrasProibidas = ["morre", "final", "assassino", "traidor"]
 
-const funcoes = {
-    ComentarioCriado: async (comentario) => {
-        let status = "liberado"
-        for (let palavra of palavrasProibidas) {
-            if (comentario.texto.includes(palavra)) {
-                status = "spoiler"
-            } else {
-                status
-            }
+const moderaComentario = async (comentario) => {
+    let status = "liberado"
+    for (let palavra of palavrasProibidas) {
+        if (comentario.texto.includes(palavra)) {
+            status = "spoiler"
+        } else {
+            status
         }
-
-        const comentarioModerado = {
-            id: comentario.id,
-            texto: comentario.texto,
-            serieId: comentario.serieId,
-            status: status
-        
-        }
-        await axios.post('http://localhost:10000/eventos', {
-            tipo: 'ComentarioModerado',
-            dados: comentarioModerado
-        })
     }
+    const comentarioModerado = {
+        id: comentario.id,
+        texto: comentario.texto,
+        serieId: comentario.serieId,
+        status: status
+
+    }
+
+    await axios.post('http://localhost:10000/eventos', {
+        tipo: 'ComentarioModerado',
+        dados: comentarioModerado
+    })
+}
+
+
+const funcoes = {
+    ComentarioCriado: moderaComentario,
+    ComentarioEditado: moderaComentario
 }
 
 app.post('/eventos', function (req, res) {
