@@ -4,7 +4,7 @@ const app = express()
 app.use(express.json())
 
 const eventos = []
-const HOST = 'localhost'
+const HOST = '192.168.0.107'
 
 app.post('/eventos', async (req, res) => {
     const evento = req.body

@@ -5,7 +5,7 @@ const {v4: uuidv4} = require('uuid')
 app.use(express.json())
 
 const comentariosPorSerieId = {}
-const HOST = 'localhost'
+const HOST = '192.168.0.107'
 
 const funcoes = {
     ComentarioModerado: async (comentarioModerado) => {

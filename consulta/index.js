@@ -4,7 +4,7 @@ const app = express()
 app.use(express.json())
 
 const baseConsulta = {}
-const HOST = 'localhost'
+const HOST = '192.168.0.107'
 
 const atualizaComentario = (comentarioAtualizado) => {
     const serie = baseConsulta[comentarioAtualizado.serieId]

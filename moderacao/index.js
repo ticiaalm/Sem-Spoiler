@@ -5,7 +5,7 @@ app.use(express.json())
 
 const palavrasProibidas = ["morre", "final", "assassino", "traidor"]
 const ultimosEventos = {}
-const HOST = 'localhost'
+const HOST = '192.168.0.107'
 
 const moderaComentario = async (comentario) => {
     let status = "liberado"

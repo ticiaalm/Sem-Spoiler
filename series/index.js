@@ -5,7 +5,7 @@ app.use(express.json())
 
 const series = {}
 let id = 1
-const HOST = 'localhost'
+const HOST = '192.168.0.107'
 
 app.get('/series', (req, res) => {
     res.json(series)
